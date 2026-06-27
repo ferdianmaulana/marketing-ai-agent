@@ -94,9 +94,9 @@ def ask(request: AskRequest):
 
 
 @app.post("/etl/run", response_model=ETLResponse)
-def trigger_etl():
+def trigger_etl(max_results: int = 10):
     try:
-        run_etl()
+        run_etl(max_results=max_results)
         return ETLResponse(status="success", message="ETL completed successfully.")
     except Exception as e:
         logger.error(f"ETL error: {e}")

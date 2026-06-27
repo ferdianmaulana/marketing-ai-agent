@@ -106,7 +106,7 @@ def save_video_stats(session, videos: list):
         session.add(record)
 
 
-def run_etl():
+def run_etl(max_results: int = 10):
     print(f"[ETL] Starting run at {datetime.now(JAKARTA_TZ).isoformat()}")
 
     if not CHANNEL_IDS:
@@ -128,7 +128,7 @@ def run_etl():
             print(f"  Channel: {channel_data['channel_name']} | "
                   f"Subscribers: {channel_data['subscriber_count']:,}")
 
-            videos = fetch_top_videos(youtube, channel_id, channel_data["channel_name"])
+            videos = fetch_top_videos(youtube, channel_id, channel_data["channel_name"], max_results=max_results)
             save_video_stats(session, videos)
             print(f"  Saved {len(videos)} videos.")
 

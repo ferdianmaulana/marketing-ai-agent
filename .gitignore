@@ -3,6 +3,8 @@
 .env.*
 !.env.example
 
+marketing-ai-agent
+
 # Python
 __pycache__/
 *.pyc

@@ -6,9 +6,9 @@ import json
 
 @tool
 def get_channel_stats(channel_name: str) -> str:
+    """Get the latest subscriber count, total views, and video count for a YouTube channel by name."""
     session = SessionLocal()
     try:
-        # Get the most recent snapshot for a channel matching the name
         snapshot = (
             session.query(ChannelSnapshot)
             .filter(ChannelSnapshot.channel_name.ilike(f"%{channel_name}%"))
@@ -33,6 +33,7 @@ def get_channel_stats(channel_name: str) -> str:
 
 @tool
 def get_top_videos(channel_name: str, limit: int = 5) -> str:
+    """Get the top videos for a YouTube channel by name, ranked by view count."""
     session = SessionLocal()
     try:
         videos = (
@@ -65,6 +66,7 @@ def get_top_videos(channel_name: str, limit: int = 5) -> str:
 
 @tool
 def compare_channels(channel_name_a: str, channel_name_b: str) -> str:
+    """Compare two YouTube channels' subscriber count, total views, video count, and average engagement rate."""
     session = SessionLocal()
     try:
         def get_latest(name: str):
@@ -112,7 +114,8 @@ def compare_channels(channel_name_a: str, channel_name_b: str) -> str:
 
 
 @tool
-def list_tracked_channels() -> str:
+def list_tracked_channels(dummy: str = "") -> str:
+    """List all YouTube channels currently tracked in the database, with their last data update time."""
     session = SessionLocal()
     try:
         channels = (
