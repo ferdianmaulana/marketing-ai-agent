@@ -30,18 +30,5 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  marketing-scheduler:
-    build: .
-    container_name: marketing-scheduler
-    command: python scheduler.py
-    env_file:
-      - .env
-    depends_on:
-      marketing-db:
-        condition: service_healthy
-      marketing-api:
-        condition: service_started
-    restart: unless-stopped
-
 volumes:
   marketing_db_data:

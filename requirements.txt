@@ -11,3 +11,4 @@ langchain-core==0.2.9
 apscheduler==3.10.4
 pandas==2.2.2
 pydantic==2.7.4
+isodate==0.7.2
