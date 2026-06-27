@@ -1,0 +1,57 @@
+name: Deploy to Tencent VM
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:   # allow manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: ${{ secrets.VM_PORT }}
+          script: |
+            set -e
+
+            # Go to project directory (create if first deploy)
+            mkdir -p ~/marketing-ai-agent
+            cd ~/marketing-ai-agent
+
+            # Pull latest code
+            if [ -d ".git" ]; then
+              git pull origin main
+            else
+              git clone https://github.com/${{ github.repository }}.git .
+            fi
+
+            # Write .env from GitHub Secrets (never stored in repo)
+            cat > .env << EOF
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@marketing-db:5432/${{ secrets.POSTGRES_DB }}
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
+            YOUTUBE_CHANNEL_IDS=${{ secrets.YOUTUBE_CHANNEL_IDS }}
+            EOF
+
+            # Build and restart containers
+            docker compose pull || true
+            docker compose up -d --build
+
+            # Clean up unused images to save disk space
+            docker image prune -f
+
+            echo "Deploy complete."

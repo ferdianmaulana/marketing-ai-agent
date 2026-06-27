@@ -1,0 +1,47 @@
+services:
+  marketing-db:
+    image: postgres:15
+    container_name: marketing-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5433:5432"
+    volumes:
+      - marketing_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  marketing-api:
+    build: .
+    container_name: marketing-api
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    depends_on:
+      marketing-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  marketing-scheduler:
+    build: .
+    container_name: marketing-scheduler
+    command: python scheduler.py
+    env_file:
+      - .env
+    depends_on:
+      marketing-db:
+        condition: service_healthy
+      marketing-api:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  marketing_db_data:
