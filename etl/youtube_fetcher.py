@@ -81,6 +81,7 @@ def fetch_top_videos(youtube, channel_id: str, channel_name: str, max_results: i
 
         videos.append({
             "video_id": item["id"],
+            "video_url": f"https://www.youtube.com/watch?v={item['id']}",
             "channel_id": channel_id,
             "channel_name": channel_name,
             "title": item["snippet"]["title"],

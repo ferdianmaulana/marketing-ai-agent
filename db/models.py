@@ -32,6 +32,7 @@ class VideoStats(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     video_id = Column(String(64), nullable=False, index=True)
+    video_url = Column(String(256))
     channel_id = Column(String(64), nullable=False, index=True)
     channel_name = Column(String(256))
     title = Column(Text)
