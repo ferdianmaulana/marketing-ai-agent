@@ -40,6 +40,7 @@ jobs:
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@marketing-db:5432/${{ secrets.POSTGRES_DB }}
             GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
             YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
             YOUTUBE_CHANNEL_IDS=${{ secrets.YOUTUBE_CHANNEL_IDS }}
             ENVEOF

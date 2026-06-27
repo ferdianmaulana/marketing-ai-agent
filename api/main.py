@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Marketing AI Agent",
-    description="AI-powered YouTube channel analytics agent using Gemini + LangChain",
+    description="AI-powered YouTube channel analytics agent using Groq (Llama) + LangChain",
     version="1.0.0",
 )
 
