@@ -51,6 +51,7 @@ def build_agent() -> AgentExecutor:
         verbose=True,          # shows tool calls in terminal — good for demo
         max_iterations=5,      # prevent infinite loops
         handle_parsing_errors=True,
+        return_intermediate_steps=True,
     )
 
 
@@ -86,9 +87,8 @@ def run_agent(question: str, chat_history: list = None) -> dict:
         "answer": result["output"],
         "tools_used": [
             action.tool
-            for action in result.get("intermediate_steps", [])
-            if hasattr(action, "tool")
-        ] if result.get("intermediate_steps") else [],
+            for action, _ in result.get("intermediate_steps", [])
+        ],
     }
 
 
