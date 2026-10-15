@@ -101,3 +101,4 @@ def trigger_etl(max_results: int = 10):
     except Exception as e:
         logger.error(f"ETL error: {e}")
         raise HTTPException(status_code=500, detail=f"ETL error: {str(e)}")
+
