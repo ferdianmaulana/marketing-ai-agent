@@ -31,7 +31,7 @@ engagement rate ((likes + comments) / views * 100), video duration, publish date
 
 def build_agent() -> AgentExecutor:
     llm = ChatGroq(
-        model="openai/gpt-oss-20b",
+        model="openai/gpt-oss-120b",
         groq_api_key=os.getenv("GROQ_API_KEY"),
         temperature=0.3,
     )
